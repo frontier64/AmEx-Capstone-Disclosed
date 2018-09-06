@@ -12,8 +12,8 @@ exports.getUserInfo = (req, res) => {
   const datastore = new Datastore({
     projectId: projectId,
   });
-  
   var getInfo = req.body.info.userInfo
+  var userId = req.body.info.slack_user_id
   const query = datastore
   	.createQuery('Task')
    	.select(getInfo);
@@ -27,7 +27,7 @@ exports.getUserInfo = (req, res) => {
   		console.log('Tasks: ' + JSON.stringify(results));
   		tasks.forEach(task => console.log(task));
       res.setHeader('Content-Type', 'application/json'); //Requires application/json MIME type
- 	res.status(200).send(JSON.stringify({ "speech": response, "displayText": response }))
+ 	res.status(200).send(JSON.stringify({ "speech": "user with id: " + userId + " your " + getInfo + " is " + response, "displayText": "user with id: " + userId + " your " + getInfo + " is " + response }))
 	});
   
 };
