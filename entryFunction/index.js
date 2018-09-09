@@ -12,14 +12,14 @@ exports.entryFunction = function entryFunction (req, res) {
     process.env.NODE_ENV = 'development'
   }
 
-  const env = yenv()
-  var url = env.BASE_URL + req.body.result.metadata.intentName
+  const env = yenv();
+  var url = env.BASE_URL + req.body.intent.displayName;
 
   request({
     uri : url,
     method : "POST",
   	form : {
-      info : req.body.result.parameters
+      info: req.body.outputContexts[0].parameters
     }
   }, function (error, response, body) {
     console.log('error:', error); // Print the error if one occurred 

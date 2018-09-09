@@ -12,8 +12,11 @@ exports.getUserInfo = (req, res) => {
   const datastore = new Datastore({
     projectId: projectId,
   });
-  var getInfo = req.body.info.userInfo
-  var userId = req.body.info.slack_user_id
+	var getInfo = req.body.info.userInfo;
+	
+	//UserID is not unique. Need both slack_channel and slack_user_id
+	var userId = req.body.info.slack_user_id;
+	var channelId = req.body.info.slack_channel;
   const query = datastore
   	.createQuery('Task')
    	.select(getInfo);
