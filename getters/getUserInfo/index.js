@@ -29,5 +29,4 @@ exports.getUserInfo = (req, res) => {
       res.setHeader('Content-Type', 'application/json'); //Requires application/json MIME type
  	res.status(200).send(JSON.stringify({ "speech": "user with id: " + userId + " your " + getInfo + " is " + response, "displayText": "user with id: " + userId + " your " + getInfo + " is " + response }))
 	});
-  
 };

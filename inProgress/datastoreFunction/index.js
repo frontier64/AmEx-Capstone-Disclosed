@@ -8,7 +8,6 @@
 exports.dataTest = (req, res) => {
 	const Datastore = require('@google-cloud/datastore');
   	const projectId = 'ally-be86e';
-  	
 
 	// Creates a client
 	const datastore = new Datastore({

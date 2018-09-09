@@ -2,13 +2,14 @@
   "name": "entryFunction",
   "version": "0.0.1",
   "dependencies": {
-	"axios": "^0.18.0",
-    "request": "^2.85.0"
+    "axios": "^0.18.0",
+    "request": "^2.85.0",
+    "yenv": "^2.1.0"
   },
   "envirVar": {
-    "projectID" : "ally-be86e",
-  	"clientID": "310979555380.340519672964",
-  	"clientSecret": "c1936ad6b9a744ab32ce14f030267dd5",
+    "projectID": "ally-be86e",
+    "clientID": "310979555380.340519672964",
+    "clientSecret": "c1936ad6b9a744ab32ce14f030267dd5",
     "verifToken": "GUETyW70IZTneZnygiYrhr3"
   }
 }
