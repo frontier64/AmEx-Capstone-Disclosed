@@ -1,0 +1,13 @@
+Notes!
+DialogFlow authentication: https://dialogflow.com/docs/reference/v2-auth-setup
+Google Cloud authentication: https://cloud.google.com/docs/authentication/
+Security:
+    --Make sure that the cloud functions can only be accessed by DialogFlow
+    --Make sure that our bot can only be accessed by our Slack bot
+    --If one or both of these are are not true then we need to add more authentication to the bot than currently planned
+
+Plan:
+    Functions can only be accessed through our DialogFlow bot which can only be accessd through Slack (hopefully) so we
+        can rely on access to a user's slack profile for authenticating users
+    --Slack user and slack channel ID's are passed along with the request which can be used to access user info
+        --Needs to be assigned to a user when they log in for the first time as well
