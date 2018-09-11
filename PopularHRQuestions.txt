@@ -1,0 +1,26 @@
+HR/Employee Directory Questions (simple):
+How long have I been with the company?
+Who is my manager?
+How much PTO do I have?
+What is my current state tax withholding percentage?
+Where can I find tax forms?
+Who is _____? (Ask the bot who someone is and it could pull up a public profile with
+    office location, manager, title, current status (away, busy, in meeting, etc.), email address, phone number, etc...)
+What is my health insurance plan?
+How much does American Express contribute to my 401k?
+What are my benefits?
+Who is in my management tree? (who I manage directly, who is my manager, who is my manager's manager, etc...)
+Does the company provide any employee discounts?
+
+HR/Employee Directory Questions (complex):
+Anonymous complaints/concerns? (Provide a way for employees to tell HR about a problem without feeling like they'll be
+    punished or face some consequences... would not track complaints with names but rather use a UUID for each person
+    that are not directly tied to names in order to provide more information like if 40 complaints are attributed to one
+    UUID you can figure that it's not multiple people complaining about one person/thing)
+Request PTO next Tuesday.
+Change my home address.
+Change my mobile phone number.
+
+
+Extra Questions:
+How long will it take me to get home? (would ask for a home address and then ask if they would like to save it)
