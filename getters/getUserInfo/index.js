@@ -17,7 +17,7 @@ exports.getUserInfo = (req, res) => {
 	var userId;
 	var getInfo;
 	var channelId;
-	if (req.body.query == null){
+	if (req.body.query == undefined){
 		slackConnected = false;
 	}
 	//Idk what this would entail. Is this just a basic call without a previous call to dialogflow? 
@@ -50,6 +50,6 @@ exports.getUserInfo = (req, res) => {
 		text_response = "your " + getInfo + " is " + response;
 	}
 	res.setHeader('Content-Type', 'application/json'); //Requires application/json MIME type
-	res.status(200).send(JSON.stringify({ "speech": text_response, "displayText": text_response}))
+	res.status(200).send(JSON.stringify({"fulfillmentText": text_response}))
 	});
 };
