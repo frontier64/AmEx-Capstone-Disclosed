@@ -15,11 +15,19 @@ exports.getUserInfo = (req, res) => {
 	var getInfo = req.body.queryResult.parameters.userInfo;
 	
 	//UserID is not unique. Need both slack_channel and slack_user_id
-	var userId = req.body.info.slack_user_id;
-	var channelId = req.body.query.slack_channel;
+
+
   var slackConnected = true;
-  if (userId == null or channelId == null){
+  //Idk what this would entail. Is this just a basic call without a previous call to dialogflow? 
+  //  Either way it should be checked for.
+  if (req.body.query == null){
     slackConnected = false;
+  } else {
+  	var userId = req.body.query.slack_user_id;
+  	var channelId = req.body.query.slack_channel;
+    if (userId == null or channelId == null){
+      slackConnected = false;
+    }
   }
   const query = datastore
   	.createQuery('Task')
