@@ -17,7 +17,7 @@ exports.getUserInfo = (req, res) => {
     slackConnected = false;
   }
   var userId;
-	var getInfo = req.body.queryResult.parameters.userInfo;
+	var getInfo;
   var channelId;
 	var slackConnected = true;
 	//Idk what this would entail. Is this just a basic call without a previous call to dialogflow? 
