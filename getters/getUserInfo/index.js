@@ -15,9 +15,9 @@ exports.getUserInfo = (req, res) => {
 
 	var slackConnected = true;
 	var userId;
-	var getInfo;
+	var getInfo = req.body.info.userInfo;
 	var channelId;
-	if (req.body.query == undefined){
+	if (req.body.query == undefined || req.body.query == null){
 		slackConnected = false;
 	}
 	//Idk what this would entail. Is this just a basic call without a previous call to dialogflow? 
@@ -26,7 +26,7 @@ exports.getUserInfo = (req, res) => {
 	if (slackConnected){
 		var userId = req.body.query.slack_user_id;
 		channelId = req.body.query.slack_channel;
-		if (userId == null || channelId == null){
+		if (userId == undefined || channelId == undefined){
 			slackConnected = false;
 		}
 	}
