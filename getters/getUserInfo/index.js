@@ -24,8 +24,8 @@ exports.getUserInfo = (req, res) => {
 	//	Either way it should be checked for.
 	//UserID is not unique. Need both slack_channel and slack_user_id
 	if (slackConnected){
-		userId = req.body.query.slack_user_id;
-		channelId = req.body.query.slack_channel;
+		userId = req.body.outputContexts.parameters.slack_user_id;
+		channelId = req.body.outputContexts.parameters.slack_channel;
 		if (userId == undefined || channelId == undefined || userId == undefined){
 			slackConnected = false;
 		}
@@ -51,5 +51,6 @@ exports.getUserInfo = (req, res) => {
 	}
 	res.setHeader('Content-Type', 'application/json'); //Requires application/json MIME type
 	res.status(200).send(JSON.stringify({"fulfillmentText": text_response}))
+	return;
 	});
 };
