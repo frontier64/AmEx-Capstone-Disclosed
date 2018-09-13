@@ -9,45 +9,47 @@ const projectId = 'ally-be86e';
 
 exports.getUserInfo = (req, res) => {
 	// Creates a client
-  const datastore = new Datastore({
-    projectId: projectId,
-  });
+	const datastore = new Datastore({
+		projectId: projectId,
+	});
 	var getInfo = req.body.queryResult.parameters.userInfo;
 	
-	//UserID is not unique. Need both slack_channel and slack_user_id
 
 
-  var slackConnected = true;
-  //Idk what this would entail. Is this just a basic call without a previous call to dialogflow? 
-  //  Either way it should be checked for.
-  if (req.body.query == null){
-    slackConnected = false;
-  } else {
-  	var userId = req.body.query.slack_user_id;
-  	var channelId = req.body.query.slack_channel;
-    if (userId == null or channelId == null){
-      slackConnected = false;
-    }
-  }
-  const query = datastore
-  	.createQuery('Task')
-   	.select(getInfo);
+	var slackConnected = true;
+	//Idk what this would entail. Is this just a basic call without a previous call to dialogflow? 
+	//	Either way it should be checked for.
+	if (req.body.query == null){
+		slackConnected = false;
+	} else {
 
-  var response;
-  datastore.runQuery(query).then(results => {
+		//UserID is not unique. Need both slack_channel and slack_user_id
+
+		var userId = req.body.query.slack_user_id;
+		var channelId = req.body.query.slack_channel;
+		if (userId == null || channelId == null){
+			slackConnected = false;
+		}
+	}
+	const query = datastore
+		.createQuery('Task')
+	 	.select(getInfo);
+
+	var response;
+	datastore.runQuery(query).then(results => {
 	// Task entities found.
 	const tasks = results[0];
-  response = results[0][0];
-  response = results[0][0][getInfo];
-  console.log('Tasks: ' + JSON.stringify(results));
-  tasks.forEach(task => console.log(task));
-  var text_response;
-  if (slackConnected = true){
-    text_response = "user with id: " userId + " your " + getInfo + " is " + response;
-  } else {
-    text_response = "your " getInfo + " is " response;
-  }
-  res.setHeader('Content-Type', 'application/json'); //Requires application/json MIME type
-  res.status(200).send(JSON.stringify({ "speech": text_response, "displayText": text_response}))
-  });
+	response = results[0][0];
+	response = results[0][0][getInfo];
+	console.log('Tasks: ' + JSON.stringify(results));
+	tasks.forEach(task => console.log(task));
+	var text_response;
+	if (slackConnected = true){
+		text_response = "user with id: " userId + " your " + getInfo + " is " + response;
+	} else {
+		text_response = "your " getInfo + " is " response;
+	}
+	res.setHeader('Content-Type', 'application/json'); //Requires application/json MIME type
+	res.status(200).send(JSON.stringify({ "speech": text_response, "displayText": text_response}))
+	});
 };
