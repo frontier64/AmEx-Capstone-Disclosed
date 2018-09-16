@@ -13,10 +13,10 @@ exports.getUserInfo = (req, res) => {
 		projectId: projectId,
 	});
 
-	var userId = req.body.slackInfo.payload.authed_users[0];
+	var userId = req.body.slackInfo.authed_users[0];
 	var getInfo = req.body.queryInfo.userInfo;
-	var channelId = req.body.slackInfo.payload.event.channel;
-	var teamId = req.body.slackInfo.payload.team_id;
+	var channelId = req.body.slackInfo.event.channel;
+	var teamId = req.body.slackInfo.team_id;
 		
 	const query = datastore
 		.createQuery('Task')
