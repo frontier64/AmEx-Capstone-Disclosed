@@ -15,13 +15,14 @@ exports.entryFunction = function entryFunction (req, res) {
   console.log('Received Request Body: ' + JSON.stringify(req.body));
 
   const env = yenv();
-  var url = env.BASE_URL + req.body.intent.displayName;
+  var url = env.BASE_URL + req.body.queryResult.intent.displayName;
 
   request({
     uri : url,
     method : "POST",
   	form : {
-      info: req.body.outputContexts[0].parameters
+      queryInfo: req.body.queryResult.parameters,
+      slackInfo: req.body.originalDetectIntentRequest.payload
     }
   }, function (error, response, body) {
     console.log('error:', error); // Print the error if one occurred 

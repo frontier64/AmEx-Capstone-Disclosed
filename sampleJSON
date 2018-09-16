@@ -1,0 +1,39 @@
+{
+    "responseId":"44910d64-ef2a-42b3-b29d-e3fada988859",
+    "queryResult": {
+        "queryText":"what is my email?",
+        "parameters":{
+            "userInfo":"emailaddress"
+        },
+        "allRequiredParamsPresent":true,
+        "intent":{
+            "name":"projects/ally-be86e/agent/intents/826603f8-3b25-4d13-b94b-a6cc3394a502",
+            "displayName":"getUserInfo"
+        },
+        "intentDetectionConfidence":1,
+        "languageCode":"en"
+    },
+    "originalDetectIntentRequest": {
+        "source":"slack",
+        "payload":{
+            "authed_users":["U94UNG6DR"],
+            "event_id":"EvCUJ4KB45",
+            "api_app_id":"A9A5BQT2L",
+            "team_id":"T94UTGBB6",
+            "event":{
+                "client_msg_id":"9ea706ce-abb7-4e58-9a63-b50188356b89",
+                "event_ts":"1537058524.000100",
+                "channel":"D9GLFKHHC",
+                "text":"what is my email?",
+                "type":"message",
+                "channel_type":"im",
+                "user":"U94UNG6DR",
+                "ts":"1537058524.000100"
+            },
+            "type":"event_callback",
+            "event_time":1537058524,
+            "token":"5txKtV8wBT7pWEkSz5Y1619V"
+        }
+    },
+    "session":"projects/ally-be86e/agent/sessions/7c50e2f5-6ec8-4eeb-b679-0426a641e171"
+}

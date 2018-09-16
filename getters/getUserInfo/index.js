@@ -15,7 +15,7 @@ exports.getUserInfo = (req, res) => {
 
 	var slackConnected = true;
 	var userId;
-	var getInfo = req.body.queryResult.parameters.userInfo;
+	var getInfo = req.body.queryInfo.userInfo;
 	var channelId;
 	if (req.body.query == undefined || req.body.query == null){
 		slackConnected = false;
@@ -24,9 +24,10 @@ exports.getUserInfo = (req, res) => {
 	//	Either way it should be checked for.
 	//UserID is not unique. Need both slack_channel and slack_user_id
 	if (slackConnected){
-		userId = req.body.outputContexts.parameters.slack_user_id;
-		channelId = req.body.outputContexts.parameters.slack_channel;
-		if (userId == undefined || channelId == undefined || userId == undefined){
+		userId = req.body.slackInfo.authed_users[0];
+		channelId = req.body.slackInfo.event.channel;
+		teamId = req.body.slackInfo.team_id;
+		if (userId == undefined || channelId == undefined || teamId == undefined){
 			slackConnected = false;
 		}
 	}
