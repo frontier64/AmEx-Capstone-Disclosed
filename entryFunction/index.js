@@ -12,6 +12,8 @@ exports.entryFunction = function entryFunction (req, res) {
     process.env.NODE_ENV = 'development'
   }
 
+  console.log('Received Request Body: ' + JSON.stringify(req.body));
+
   const env = yenv();
   var url = env.BASE_URL + req.body.intent.displayName;
 
