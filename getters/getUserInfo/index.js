@@ -8,36 +8,41 @@ const Datastore = require('@google-cloud/datastore');
 const projectId = 'ally-be86e';
 
 exports.getUserInfo = (req, res) => {
-	// Creates a client
-	const datastore = new Datastore({
-		projectId: projectId,
-	});
-
-	var userId = req.body.slackInfo.authed_users[0];
-	var getInfo = req.body.queryInfo.userInfo;
-	var channelId = req.body.slackInfo.event.channel;
-	var teamId = req.body.slackInfo.team_id;
+	var slackUserID = req.body.info.slack_user_id;
+	var slackChannelID = req.body.info.slack_channel;
+	var requestedProperty = req.body.info.userInfo; //userInfo isn't a very descriptive name. Consider changing?
+	//var projectID = req.body.env.projectID (Waiting on environment variable forwarding in order to enable this)
+	
+	// Creates a datastore client connection
+	const datastore = new Datastore({ projectId: projectId, });
+	
+	// Finds user in DB by provided slackid, and finds the requestedProperty. 
+	const datastoreQuery = datastore
+		.createQuery('user')
+	 	.select(requestedProperty)
+		.filter('slackID','=',slackUserID);
+	
+	datastore.runQuery(datastoreQuery).then(results => {
+		var response; 
+	
+		if(results[0].length == 0) {
+			//SlackID was not found in the Datastore. 
+			//TODO: Slack Authentication
+			response = "Sorry, we don't recognize your slackID."; //Temporary
+			
+		} 
+		else if (results[0].length == 1){ //A single result, as expected.
+			response = "Your " + requestedProperty + " is " + results[0][0][requestedProperty] + ". SlackID: " + slackUserID + ". ChannelID: " + slackChannelID;
 		
-	const query = datastore
-		.createQuery('Task')
-	 	.select(getInfo);
-
-	var response;
-	datastore.runQuery(query).then(results => {
-	// Task entities found.
-	const tasks = results[0];
-	response = results[0][0];
-	response = results[0][0][getInfo];
-	console.log('Tasks: ' + JSON.stringify(results));
-	tasks.forEach(task => console.log(task));
-	var text_response;
-	if (slackConnected = true){
-		text_response = "user with id: " + userId + " your " + getInfo + " is " + response;
-	} else {
-		text_response = "your " + getInfo + " is " + response;
-	}
-	res.setHeader('Content-Type', 'application/json'); //Requires application/json MIME type
-	res.status(200).send(JSON.stringify({"fulfillmentText": text_response}))
-	return;
+		} 
+		else { //Query issue. Most likely caused by the query returning more than 1 user. 
+			response = "Error: Malformed query of slackID. SlackID query returned " + results[0].length + " results.";
+		}
+		
+		//Build and send the response
+	
+		res.setHeader('Content-Type', 'application/json'); //Requires application/json MIME type
+		res.status(200).send(JSON.stringify({"fulfillmentText": text_response}))
+		return;
 	});
-};
+}
