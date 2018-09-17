@@ -1,0 +1,59 @@
+indexes:
+
+# Example Index
+- kind: Task
+  properties:
+  - name: slackID
+  - name: location
+  
+# Indexes for getUserInfo
+- kind: user
+  properties:
+  - name: slackID
+  - name: address
+ 
+- kind: user
+  properties: 
+  - name: slackID
+  - name: band
+  
+- kind: user
+  properties:  
+  - name: slackID
+  - name: city
+  
+- kind: user
+  properties:   
+  - name: slackID
+  - name: country
+    
+- kind: user
+  properties: 
+  - name: slackID
+  - name: email
+   
+- kind: user
+  properties:  
+  - name: slackID
+  - name: employeestatus
+    
+- kind: user
+  properties: 
+  - name: slackID
+  - name: name
+   
+- kind: user
+  properties:  
+  - name: slackID
+  - name: serviceyears
+  
+- kind: user
+  properties:   
+  - name: slackID
+  - name: state
+  
+- kind: user
+  properties:   
+  - name: slackID
+  - name: zip
+    
