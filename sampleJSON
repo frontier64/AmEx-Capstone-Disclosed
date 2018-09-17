@@ -3,7 +3,7 @@
     "queryResult": {
         "queryText":"what is my email?",
         "parameters":{
-            "userInfo":"emailaddress"
+            "userInfo":"email"
         },
         "allRequiredParamsPresent":true,
         "intent":{

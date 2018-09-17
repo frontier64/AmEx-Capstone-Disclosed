@@ -8,9 +8,10 @@ const Datastore = require('@google-cloud/datastore');
 const projectId = 'ally-be86e';
 
 exports.getUserInfo = (req, res) => {
-	var slackUserID = req.body.info.slack_user_id;
-	var slackChannelID = req.body.info.slack_channel;
-	var requestedProperty = req.body.info.userInfo; //userInfo isn't a very descriptive name. Consider changing?
+	var slackUserID = req.body.slackInfo.authed_users[0];
+	var slackChannelID = req.body.slackInfo.event.channel;
+	var slackTeamID = req.body.slackInfo.team_id; //Currently not used
+	var requestedProperty = req.body.queryInfo.userInfo; //userInfo isn't a very descriptive name. Consider changing?
 	//var projectID = req.body.env.projectID (Waiting on environment variable forwarding in order to enable this)
 	
 	// Creates a datastore client connection
@@ -42,7 +43,7 @@ exports.getUserInfo = (req, res) => {
 		//Build and send the response
 	
 		res.setHeader('Content-Type', 'application/json'); //Requires application/json MIME type
-		res.status(200).send(JSON.stringify({"fulfillmentText": text_response}))
+		res.status(200).send(JSON.stringify({"fulfillmentText": response}))
 		return;
 	});
 }
