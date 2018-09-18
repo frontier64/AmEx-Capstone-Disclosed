@@ -4,7 +4,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "request": "^2.85.0",
-    "yenv": "^2.1.0"
+    "yenv": "^2.1.0",
+    "basic-auth": "^2.0.0"
   },
   "envirVar": {
     "projectID": "ally-be86e",

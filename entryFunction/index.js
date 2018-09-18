@@ -6,17 +6,26 @@
  */
 const request = require('request');
 const yenv = require('yenv');
+var auth = require('basic-auth');
 
 exports.entryFunction = function entryFunction (req, res) {
+  console.log('Received Request Body: ' + JSON.stringify(req.body));
+  
+  //Environment variable handling
   if (process.env.NODE_ENV !== 'production') {
     process.env.NODE_ENV = 'development'
   }
-
-  console.log('Received Request Body: ' + JSON.stringify(req.body));
-
   const env = yenv();
-  var url = env.BASE_URL + req.body.queryResult.intent.displayName;
 
+  //Authentication
+  var credentials = auth(req);
+  if (!credentials || credentials.name !== env.AUTH_USERNAME || credentials.pass !== env.AUTH_PASSWORD) {
+    res.statusCode = 401;
+    res.send('Access denied');
+  } 
+  
+  //Request handling
+  var url = env.BASE_URL + req.body.queryResult.intent.displayName;
   request({
     uri : url,
     method : "POST",
