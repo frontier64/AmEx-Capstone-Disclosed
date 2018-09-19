@@ -22,10 +22,21 @@ exports.entryFunction = function entryFunction (req, res) {
   if (!credentials || credentials.name !== env.AUTH_USERNAME || credentials.pass !== env.AUTH_PASSWORD) {
     res.statusCode = 401;
     res.send('Access denied');
-  } 
+  }
+
+  //Could be changed so that intent names are stored in the env vars but this works for now since they are only used here
+  var intentName = "";
+  switch (req.body.queryResult.intent.displayName) {
+    case "getUserInfo":
+      intentName = "getUserInfo";
+      break;
+    default:
+      res.statusCode = 404;
+      res.send("Not found");
+  }
   
   //Request handling
-  var url = env.BASE_URL + req.body.queryResult.intent.displayName;
+  var url = env.BASE_URL + intentName;
   request({
     uri : url,
     method : "POST",
