@@ -5,6 +5,7 @@
  * @param {!Object} res Cloud Function response context.
  */
 const Datastore = require('@google-cloud/datastore');
+const request = require('request');
 
 exports.getUserInfo = (req, res) => {
 	var slackUserID = req.body.slackInfo.authed_users[0];
@@ -26,9 +27,10 @@ exports.getUserInfo = (req, res) => {
 		var response; 
 	
 		if(results[0].length == 0) {
-			//SlackID was not found in the Datastore. 
-			//TODO: Slack Authentication
-			response = "Sorry, we don't recognize your slackID."; //Temporary
+			request({
+				uri = envVar.BASE_URL + "setUserEmail?user=" + slackUserID
+			});
+			response = "Sorry, we don't recognize your slackID. Please try again!"; //Temporary
 			
 		} 
 		else if (results[0].length == 1){ //A single result, as expected.
