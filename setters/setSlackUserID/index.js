@@ -7,6 +7,7 @@
 const Datastore = require('@google-cloud/datastore');
 
 exports.setSlackUserID = (req, res) => {	
+    var projectID = req.envVar.PROJECT_ID;
 	// Creates a datastore client connection
     const datastore = new Datastore({ projectId: projectID, });
     

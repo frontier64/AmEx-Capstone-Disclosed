@@ -28,9 +28,14 @@ exports.getUserInfo = (req, res) => {
 	
 		if(results[0].length == 0) {
 			request({
-				uri = envVar.BASE_URL + "setUserEmail?user=" + slackUserID
+				uri: envVar.BASE_URL + "setUserEmail",
+				method: "POST",
+				form: {
+					slackUser : slackUserID,
+					envVar: envVar 
+				}
 			});
-			response = "Sorry, we don't recognize your slackID. Please try again!"; //Temporary
+			response = "Sorry, we don't recognize your slackID. Please try again!";
 			
 		} 
 		else if (results[0].length == 1){ //A single result, as expected.
