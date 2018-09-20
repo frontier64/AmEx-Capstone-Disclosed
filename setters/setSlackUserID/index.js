@@ -5,16 +5,27 @@
  * @param {!Object} res Cloud Function response context.
  */
 const Datastore = require('@google-cloud/datastore');
+const request = require('request');
 
 exports.setSlackUserID = (req, res) => {	
     var projectID = req.envVar.PROJECT_ID;
-	// Creates a datastore client connection
-    const datastore = new Datastore({ projectId: projectID, });
-    
-    //Use the request information to call the slack API to get the user email address
+    request({
+        url: "https://slack.com/api/users.info?user=" + req.slackUser,
+        method: "GET",
+        headers: {
+            "Authorization" : "Bearer " + req.envVar.SLACK_TOKEN
+        }
+    }, function (error, response, body){
+        var userEmail = body.user.profile.email;
+        if (userEmail){
+            //Add the slack user ID to the DB
+            // Creates a datastore client connection
+            const datastore = new Datastore({ projectId: projectID, });
+            console.log("Adding " + userEmail + "'s slackID");
+        }
 
-    //Find the email in the datastore and set the slack user ID
-	
+        //Add error handling here
+    });
     res.setHeader('Content-Type', 'application/json'); //Requires application/json MIME type
     res.status(200).send("Success!")
     return;
