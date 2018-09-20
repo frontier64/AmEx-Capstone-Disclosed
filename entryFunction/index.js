@@ -15,7 +15,7 @@ exports.entryFunction = function entryFunction (req, res) {
   if (process.env.NODE_ENV !== 'production') {
     process.env.NODE_ENV = 'development'
   }
-  const env = yenv('../env.yaml');
+  const env = yenv();
 
   //Authentication
   var credentials = auth(req);
