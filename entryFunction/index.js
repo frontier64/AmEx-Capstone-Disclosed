@@ -42,7 +42,8 @@ exports.entryFunction = function entryFunction (req, res) {
     method : "POST",
   	form : {
       queryInfo: req.body.queryResult.parameters,
-      slackInfo: req.body.originalDetectIntentRequest.payload
+      slackInfo: req.body.originalDetectIntentRequest.payload,
+      envVar: env
     }
   }, function (error, response, body) {
     console.log('error:', error); // Print the error if one occurred 

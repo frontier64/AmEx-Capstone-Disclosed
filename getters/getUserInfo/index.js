@@ -5,17 +5,16 @@
  * @param {!Object} res Cloud Function response context.
  */
 const Datastore = require('@google-cloud/datastore');
-const projectId = 'ally-be86e';
 
 exports.getUserInfo = (req, res) => {
 	var slackUserID = req.body.slackInfo.authed_users[0];
 	var slackChannelID = req.body.slackInfo.event.channel;
 	var slackTeamID = req.body.slackInfo.team_id; //Currently not used
 	var requestedProperty = req.body.queryInfo.userInfo; //userInfo isn't a very descriptive name. Consider changing?
-	//var projectID = req.body.env.projectID (Waiting on environment variable forwarding in order to enable this)
+	var projectID = req.body.envVar.PROJECT_ID //(Waiting on environment variable forwarding in order to enable this)
 	
 	// Creates a datastore client connection
-	const datastore = new Datastore({ projectId: projectId, });
+	const datastore = new Datastore({ projectId: projectID, });
 	
 	// Finds user in DB by provided slackid, and finds the requestedProperty. 
 	const datastoreQuery = datastore
