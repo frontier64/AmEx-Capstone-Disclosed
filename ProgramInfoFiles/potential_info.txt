@@ -1,0 +1,21 @@
+Intents:
+	getUserInfo
+	setUserInfo
+Entities:
+	userInfo
+
+getUserInfo:
+	determines which user info the employee is requesting. Searches the database based off the slack_id of the requesting employee and queries for the relevant data. Must authenticate based on the slack auth token
+
+setUserInfo:
+	determines which user info the employee is trying to set. If the info is a settable form of info then sets the particular user info for the slack_id of the requesting employee in the database. Must authenticate based on the slack auth token.
+
+Valid userInfo’s:
+pto
+peopleID
+email
+supervisorID
+location
+name
+status
+serviceYears
