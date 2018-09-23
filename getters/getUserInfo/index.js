@@ -47,9 +47,6 @@ exports.getUserInfo = (req, res) => {
 		}
 		
 		//Build and send the response
-	
-		res.setHeader('Content-Type', 'application/json'); //Requires application/json MIME type
-		res.status(200).send(JSON.stringify({"fulfillmentText": response}))
-		return;
+		res.json({"fulfillmentText": response});
 	});
 }
