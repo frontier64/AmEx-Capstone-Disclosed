@@ -26,7 +26,5 @@ exports.setSlackUserID = (req, res) => {
 
         //Add error handling here
     });
-    res.setHeader('Content-Type', 'application/json'); //Requires application/json MIME type
-    res.status(200).send("Success!")
-    return;
+    res.json("Success!")
 }
