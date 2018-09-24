@@ -9,6 +9,25 @@ const request = require('request');
 
 exports.setSlackUserID = (req, res) => {	
     var projectID = req.envVar.PROJECT_ID;
+    //Let the user know that we have to update their information
+    request({
+        url: "https://slack.com/api/chat.postMessage",
+        method: "POST",
+        headers: {
+            "Authorization" : "Bearer " + req.envVar.SLACK_TOKEN,
+            "Content-type" : "application/json"
+        },
+        body: {
+            "text" : "I couldn't find your SlackID in the database so I'm updating it now!",
+            "channel" : req.slackChannel
+        }
+    }, function (error, response, body) {
+        if (!response.ok){
+            console.log(error);
+        }
+    });
+
+    //Update the user's information
     request({
         url: "https://slack.com/api/users.info?user=" + req.slackUser,
         method: "GET",
@@ -26,7 +45,5 @@ exports.setSlackUserID = (req, res) => {
 
         //Add error handling here
     });
-    res.setHeader('Content-Type', 'application/json'); //Requires application/json MIME type
-    res.status(200).send("Success!")
-    return;
+    res.json("Success!")
 }
