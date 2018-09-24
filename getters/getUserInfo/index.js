@@ -32,6 +32,7 @@ exports.getUserInfo = (req, res) => {
 				method: "POST",
 				form: {
 					slackUser : slackUserID,
+					slackChannel: slackChannelID,
 					envVar: envVar 
 				}
 			});
