@@ -25,18 +25,48 @@ exports.entryFunction = function entryFunction (req, res) {
   }
 
   //Could be changed so that intent names are stored in the env vars but this works for now since they are only used here
-  var intentName = "";
+  var get_or_set = "";
+  var infoType = "";
   switch (req.body.queryResult.intent.displayName) {
-    case "getUserInfo":
-      intentName = "getUserInfo";
-      break;
+
+//Getter intents
+	case "get_pto":
+	case "get_peopleID":
+	case "get_email":
+	case "get_supervisorID":
+	case "get_location":
+	case "get_name":
+	case "get_status":
+	case "get_serviceYears":
+		get_or_set = "getUserInfo";
+		infoType = req.body.queryResult.intent.displayName.substring(4);
+		req.body.queryResult.parameters.userInfo = infoType;
+		break;
+
+//Setter intents
+	case "set_pto":
+	case "set_peopleID":
+	case "set_email":
+	case "set_supervisorID":
+	case "set_location":
+	case "set_name":
+	case "set_status":
+	case "set_serviceYears":
+		get_or_set = "setUserInfo";
+		infoType = req.body.queryResult.intent.displayName.substring(4);
+		req.body.queryResult.parameters.userInfo = infoType;
+		break;
+
+//Legacy 
+	case "getUserInfo":
+		get_or_set = "getUserInfo";
     default:
       res.statusCode = 404;
       res.send("Not found");
   }
   
   //Request handling
-  var url = env.BASE_URL + intentName;
+  var url = env.BASE_URL + get_or_set;
   request({
     uri : url,
     method : "POST",
