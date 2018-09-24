@@ -13,6 +13,7 @@ exports.getUserInfo = (req, res) => {
 	var slackTeamID = req.body.slackInfo.team_id; //Currently not used
 	var requestedProperty = req.body.queryInfo.userInfo; //userInfo isn't a very descriptive name. Consider changing?
 	var projectID = req.body.envVar.PROJECT_ID //(Waiting on environment variable forwarding in order to enable this)
+	var envVar = req.envVar;
 	
 	// Creates a datastore client connection
 	const datastore = new Datastore({ projectId: projectID, });
