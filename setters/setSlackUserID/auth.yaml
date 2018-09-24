@@ -1,0 +1,7 @@
+production:
+  AUTH_USERNAME: qyucrIG81xmgPJh5LGx3l5ScELguOORN
+  AUTH_PASSWORD: qeBj6ntH0GBOzNQhzV6fnWe1EUZP0aKB
+
+development:
+  AUTH_USERNAME: userdev
+  AUTH_PASSWORD: passdev

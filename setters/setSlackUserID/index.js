@@ -7,8 +7,8 @@
  const Datastore = require('@google-cloud/datastore');
  const request = require('request');
 
- exports.setSlackUserID = (req, res) => {	
-    var projectID = req.body.envVar.PROJECT_ID;
+exports.setSlackUserID = (req, res) => {
+    const projectID = req.envVar.PROJECT_ID;
     //Let the user know that we have to update their information
     /*
     request({

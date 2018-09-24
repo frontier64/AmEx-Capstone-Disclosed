@@ -2,6 +2,8 @@
   "name": "getUserInfo",
   "version": "0.0.1",
   "dependencies": {
-    "@google-cloud/datastore": "^1.4.0"
+    "@google-cloud/datastore": "^1.4.0",
+    "basic-auth": "^2.0.1",
+    "yenv": "^2.1.0"
   }
 }
