@@ -11,7 +11,6 @@
     const projectID = req.body.envVar.PROJECT_ID;
     
     //Let the user know that we have to update their information
-    /*
     request({
         url: "https://slack.com/api/chat.postMessage",
         method: "POST",
@@ -19,7 +18,7 @@
             "Authorization" : "Bearer " + req.body.envVar.SLACK_TOKEN,
             "Content-type" : "application/json"
         },
-        body: {
+        form: {
             "text" : "I couldn't find your SlackID in the database so I'm updating it now!",
             "channel" : req.body.slackChannel
         }
@@ -27,7 +26,10 @@
         if (error) {
             console.log(error);
         }
-    });*/
+        else {
+            console.log("message sent to user: " + body);
+        }
+    });
 
     //Update the user's information in the DB
     request({
