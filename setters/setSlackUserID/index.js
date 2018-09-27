@@ -7,8 +7,9 @@
  const Datastore = require('@google-cloud/datastore');
  const request = require('request');
 
-exports.setSlackUserID = (req, res) => {
-    const projectID = req.envVar.PROJECT_ID;
+ exports.setSlackUserID = (req, res) => {	
+    const projectID = req.body.envVar.PROJECT_ID;
+    
     //Let the user know that we have to update their information
     /*
     request({
@@ -28,7 +29,7 @@ exports.setSlackUserID = (req, res) => {
         }
     });*/
 
-    //Update the user's information
+    //Update the user's information in the DB
     request({
         url: "https://slack.com/api/users.info?user=" + req.body.slackUser,
         method: "GET",
@@ -39,11 +40,10 @@ exports.setSlackUserID = (req, res) => {
         if (error) {
             console.log(error);
         }
-        //console.log('RESPONSE: ' + response);
-        console.log('BODY: ' + body);
 
-        var userEmail = body.user.profile.email;
-        var slackUserID = req.body.slackInfo.authed_users[0];
+        const jsb = JSON.parse(body);
+        var userEmail = jsb.user.profile.email;
+        var slackUserID = jsb.user.id;
 
         if (userEmail && slackUserID) {
             //Add the slack user ID to the DB
@@ -56,22 +56,20 @@ exports.setSlackUserID = (req, res) => {
             .createQuery('user')
             .filter('email','=',userEmail);
 
-            datastore.runQuery(userQuery, function(err, results) {
-                if(err) {
-                    console.log(err);
-                }
+            datastore.runQuery(userQuery).then(results => {
+                console.log('setSlackUserID - query ran, found ' + results[0].length);
 
                 if(results[0].length == 1) { //Only 1 result allowed in case of duplicate email (shouldn't happen anyway)
                     var userEntity = results[0];
-                    userEntity.slackID = slackUserID;
+                    userEntity[0]['slackID'] = slackUserID; //Sets the new slackID
 
                     datastore //Saving updated entity to Datastore
                     .save(userEntity)
                     .then(() => {
-                        console.log('Associated ' + userEmail + ':' + slackUserID);
+                        console.log('Success setSlackUserID - Associated slackID');
                     })
                     .catch(err => {
-                        console.error('ERROR:', err);
+                        console.error('Error setSlackUserID - DS Save Error: ', err);
                    });
                 }
             });
