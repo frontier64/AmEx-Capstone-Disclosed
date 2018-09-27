@@ -19,3 +19,6 @@ location
 name
 status
 serviceYears
+band
+
+New method is to have a separate intent for each valid UserInfo (e.g. get_pto, get_peopleID, etc.)
