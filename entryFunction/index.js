@@ -39,10 +39,10 @@ exports.entryFunction = function entryFunction (req, res) {
         case "get_name":
         case "get_status":
         case "get_serviceYears":
-        get_or_set = "getUserInfo";
-        infoType = req.body.queryResult.intent.displayName.substring(4);
-        req.body.queryResult.parameters.userInfo = infoType;
-        break;
+            get_or_set = "getUserInfo";
+            infoType = req.body.queryResult.intent.displayName.substring(4);
+            req.body.queryResult.parameters.userInfo = infoType;
+            break;
         
         //Setter intents
         case "set_pto":
@@ -53,18 +53,19 @@ exports.entryFunction = function entryFunction (req, res) {
         case "set_name":
         case "set_status":
         case "set_serviceYears":
-        get_or_set = "setUserInfo";
-        infoType = req.body.queryResult.intent.displayName.substring(4);
-        req.body.queryResult.parameters.userInfo = infoType;
-        break;
+            get_or_set = "setUserInfo";
+            infoType = req.body.queryResult.intent.displayName.substring(4);
+            req.body.queryResult.parameters.userInfo = infoType;
+            break;
         
         //Legacy 
         case "getUserInfo":
-        get_or_set = "getUserInfo";
+            get_or_set = "getUserInfo";
         break;
         default:
-        res.statusCode = 404;
-        res.send("Not found");
+            res.statusCode = 404;
+            res.send({"fulfillmentText" : "I'm not sure what information you're asking for."});
+        
     }
     
     //Request handling
@@ -85,6 +86,10 @@ exports.entryFunction = function entryFunction (req, res) {
         console.log('error:', error); // Print the error if one occurred 
         console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received 
         console.log('body:', body); //Prints the response of the request.
+        //If we run into an error 
+        if (response.statusCode >= 300 || response.statusCode < 200) {
+            body = {"fulfillmentText": "I ran into a problem while trying to answer your question. Please try again."};
+        }
         res.send(body);
     });
 };
