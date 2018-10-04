@@ -19,7 +19,8 @@
             "Content-type" : "application/json"
         },
         form: {
-            "text" : "I couldn't find your SlackID in the database so I'm updating it now!",
+            "text" : "I couldn't find your SlackID in the database so I'm updating it now!" + 
+                " I'll answer your question as soon as I'm done.",
             "channel" : req.body.slackChannel
         }
     }, function (error, response, body) {
@@ -69,13 +70,19 @@
                     .save(userEntity)
                     .then(() => {
                         console.log('Success setSlackUserID - Associated slackID');
+                        res.json("Success!");
                     })
                     .catch(err => {
                         console.error('Error setSlackUserID - DS Save Error: ', err);
+                        res.statusCode = 500;
+                        res.send(err);
                    });
                 }
             });
         }
+        else {
+            res.statusCode = 500;
+            res.send(error);
+        }
     });
-    res.json("Success!")
 }
