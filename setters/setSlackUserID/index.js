@@ -20,7 +20,7 @@
         },
         form: {
             "text" : "I couldn't find your SlackID in the database so I'm updating it now!" + 
-                " I'll answer your question as soon as I'm done.",
+                " I'll let you know when I'm done and then you can ask again",
             "channel" : req.body.slackChannel
         }
     }, function (error, response, body) {
@@ -70,6 +70,25 @@
                     .save(userEntity)
                     .then(() => {
                         console.log('Success setSlackUserID - Associated slackID');
+                        request({
+                            url: "https://slack.com/api/chat.postMessage",
+                            method: "POST",
+                            headers: {
+                                "Authorization" : "Bearer " + req.body.envVar.SLACK_TOKEN,
+                                "Content-type" : "application/json"
+                            },
+                            form: {
+                                "text" : "Alright, I'm ready. Ask me your question again!",
+                                "channel" : req.body.slackChannel
+                            }
+                        }, function (error, response, body) {
+                            if (error) {
+                                console.log(error);
+                            }
+                            else {
+                                console.log("message sent to user: " + body);
+                            }
+                        });
                         res.json("Success!");
                     })
                     .catch(err => {

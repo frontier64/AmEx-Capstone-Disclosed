@@ -51,22 +51,7 @@ exports.getUserInfo = (req, res) => {
                     slackChannel: slackChannelID,
                     envVar: envVar 
                 }
-            }, function (error, response, body) {
-                datastore.runQuery(datastoreQuery).then(results => {
-                    if(results[0].length === 0) {
-                        response = "I ran into a problem...";
-                        console.log("Could not find user Slack ID: " + slackUserID + " in channel " + slackChannelID);
-                    }
-                    else if (results[0].length === 1){ //A single result, as expected.
-                        response = "Your " + requestedProperty + " is " + results[0][0][requestedProperty] + ". SlackID: " + slackUserID + ". ChannelID: " + slackChannelID;
-                    
-                    } 
-                    else { //Query issue. Most likely caused by the query returning more than 1 user. 
-                        response = "Error: Malformed query of slackID. SlackID query returned " + results[0].length + " results.";
-                    }
-                });
-            });
-            
+            });            
         } 
         else if (results[0].length === 1){ //A single result, as expected.
             response = "Your " + requestedProperty + " is " + results[0][0][requestedProperty] + ". SlackID: " + slackUserID + ". ChannelID: " + slackChannelID;
