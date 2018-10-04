@@ -26,12 +26,16 @@ exports.entryFunction = function entryFunction (req, res) {
     }
     
     //Could be changed so that intent names are stored in the env vars but this works for now since they are only used here
-    var get_or_set = "";
+    var getter_function = "";
     var infoType = "";
     switch (req.body.queryResult.intent.displayName) {
         
         //Getter intents
         case "get_pto":
+            getter_function = "getPTO";
+            infoType = "pto";
+            req.body.queryResult.parameters.userInfo = infoType;
+            break;
         case "get_peopleID":
         case "get_email":
         case "get_supervisorID":
@@ -39,7 +43,7 @@ exports.entryFunction = function entryFunction (req, res) {
         case "get_name":
         case "get_status":
         case "get_serviceYears":
-            get_or_set = "getUserInfo";
+            getter_function = "getUserInfo";
             infoType = req.body.queryResult.intent.displayName.substring(4);
             req.body.queryResult.parameters.userInfo = infoType;
             break;
@@ -53,14 +57,14 @@ exports.entryFunction = function entryFunction (req, res) {
         case "set_name":
         case "set_status":
         case "set_serviceYears":
-            get_or_set = "setUserInfo";
+            getter_function = "setUserInfo";
             infoType = req.body.queryResult.intent.displayName.substring(4);
             req.body.queryResult.parameters.userInfo = infoType;
             break;
         
         //Legacy 
         case "getUserInfo":
-            get_or_set = "getUserInfo";
+            getter_function = "getUserInfo";
         break;
         default:
             res.statusCode = 404;
@@ -69,7 +73,7 @@ exports.entryFunction = function entryFunction (req, res) {
     }
     
     //Request handling
-    var url = env.BASE_URL + get_or_set;
+    var url = env.BASE_URL + getter_function;
     const authHeader = "Basic " + new Buffer(credentials.name + ":" + credentials.pass).toString('base64');
     request({
         uri: url,
