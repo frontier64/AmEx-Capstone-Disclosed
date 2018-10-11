@@ -27,14 +27,13 @@ exports.getUserInfo = (req, res) => {
     }
     
     // Creates a datastore client connection
-    const datastore = new Datastore({ projectId: projectID, });
+    const datastore = new Datastore({ projectId: projectID});
     
     // Finds user in DB by provided slackid, and finds the requestedProperty. 
     const datastoreQuery = datastore
         .createQuery('user')
          .select(requestedProperty)
         .filter('slackID','=',slackUserID);
-
     datastore.runQuery(datastoreQuery).then(results => {
         var response; 
     
@@ -54,7 +53,8 @@ exports.getUserInfo = (req, res) => {
             });            
         } 
         else if (results[0].length === 1){ //A single result, as expected.
-            response = "Your " + requestedProperty + " is " + results[0][0][requestedProperty] + ". SlackID: " + slackUserID + ". ChannelID: " + slackChannelID;
+            response = "Your " + requestedProperty + " is " + results[0][0][requestedProperty];
+            /*". SlackID: " + slackUserID + ". ChannelID: " + slackChannelID;*/
         
         } 
         else { //Query issue. Most likely caused by the query returning more than 1 user. 

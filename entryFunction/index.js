@@ -31,47 +31,33 @@ exports.entryFunction = function entryFunction (req, res) {
     switch (req.body.queryResult.intent.displayName) {
         
         //Getter intents
-        case "get_pto":
-            getter_function = "getPTO";
-            infoType = "pto";
-            req.body.queryResult.parameters.userInfo = infoType;
-            break;
-        case "get_peopleID":
-        case "get_email":
-        case "get_supervisorID":
-        case "get_location":
-        case "get_name":
-        case "get_status":
-        case "get_serviceYears":
-            getter_function = "getUserInfo";
-            infoType = req.body.queryResult.intent.displayName.substring(4);
-            req.body.queryResult.parameters.userInfo = infoType;
+        case "getUserInfo":
+            switch(req.body.queryResult.parameters.userInfo){
+                case "pto":
+                    getter_function = "getPTO";
+                    break;
+                case "email":
+                case "name":
+                case "serviceyears":
+                case "employeestatus":
+                case "address":
+                    getter_function = "getUserInfo";
+                    break;
+            }
             break;
         
         //Setter intents
-        case "set_pto":
-        case "set_peopleID":
-        case "set_email":
-        case "set_supervisorID":
-        case "set_location":
-        case "set_name":
-        case "set_status":
-        case "set_serviceYears":
+        case "setUserInfo":
             getter_function = "setUserInfo";
             infoType = req.body.queryResult.intent.displayName.substring(4);
             req.body.queryResult.parameters.userInfo = infoType;
             break;
         
-        //Legacy 
-        case "getUserInfo":
-            getter_function = "getUserInfo";
-        break;
         default:
             res.statusCode = 404;
             res.send({"fulfillmentText" : "I'm not sure what information you're asking for."});
         
     }
-    
     //Request handling
     var url = env.BASE_URL + getter_function;
     const authHeader = "Basic " + new Buffer(credentials.name + ":" + credentials.pass).toString('base64');
