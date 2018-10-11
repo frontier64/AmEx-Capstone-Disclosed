@@ -56,4 +56,11 @@ indexes:
   properties:   
   - name: slackID
   - name: zip
+
+  #Index for getPTO
+- kind: user
+  properties:   
+  - name: slackID
+  - name: band
+  - name: serviceyears
     
