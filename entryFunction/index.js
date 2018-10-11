@@ -6,7 +6,7 @@
 */
 const request = require('request');
 const yenv = require('yenv');
-var auth = require('basic-auth');
+const auth = require('basic-auth');
 
 exports.entryFunction = function entryFunction (req, res) {
     console.log('Received Request Body: ' + JSON.stringify(req.body));

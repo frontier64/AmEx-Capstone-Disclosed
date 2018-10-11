@@ -7,8 +7,18 @@
 const Datastore = require('@google-cloud/datastore');
 const request = require('request');
 const yenv = require('yenv');
+const auth = require('basic-auth');
 
 exports.getPTO = (req, res) => {
+    //Authentication
+    const authEnv = yenv('auth.yaml');
+
+    var credentials = auth(req);
+    if (!credentials || credentials.name !== authEnv.AUTH_USERNAME || credentials.pass !== authEnv.AUTH_PASSWORD) {
+        res.statusCode = 401;
+        res.send('Access denied');
+    }
+
     var slackUserID = req.body.slackInfo.authed_users[0];
     var projectID = req.body.envVar.PROJECT_ID //(Waiting on environment variable forwarding in order to enable this)
 

@@ -7,24 +7,24 @@
 const Datastore = require('@google-cloud/datastore');
 const request = require('request');
 const yenv = require('yenv');
-var auth = require('basic-auth');
+const auth = require('basic-auth');
 
 exports.getUserInfo = (req, res) => {
+    //Authentication
+    const authEnv = yenv('auth.yaml');
+
+    var credentials = auth(req);
+    if (!credentials || credentials.name !== authEnv.AUTH_USERNAME || credentials.pass !== authEnv.AUTH_PASSWORD) {
+        res.statusCode = 401;
+        res.send('Access denied');
+    }
+
     var slackUserID = req.body.slackInfo.authed_users[0];
     var slackChannelID = req.body.slackInfo.event.channel;
     var slackTeamID = req.body.slackInfo.team_id; //Currently not used
     var requestedProperty = req.body.queryInfo.userInfo; //userInfo isn't a very descriptive name. Consider changing?
     var projectID = req.body.envVar.PROJECT_ID //(Waiting on environment variable forwarding in order to enable this)
     var envVar = req.body.envVar;
-
-    const authEnv = yenv('auth.yaml');
-    
-    //Authentication
-    var credentials = auth(req);
-    if (!credentials || credentials.name !== authEnv.AUTH_USERNAME || credentials.pass !== authEnv.AUTH_PASSWORD) {
-        res.statusCode = 401;
-        res.send('Access denied');
-    }
     
     // Creates a datastore client connection
     const datastore = new Datastore({ projectId: projectID});
