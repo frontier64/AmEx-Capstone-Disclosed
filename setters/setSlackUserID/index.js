@@ -6,8 +6,18 @@
  */
  const Datastore = require('@google-cloud/datastore');
  const request = require('request');
+ const yenv = require('yenv');
+ const auth = require('basic-auth');
 
  exports.setSlackUserID = (req, res) => {	
+     //Authentication
+    const authEnv = yenv('auth.yaml');
+    var credentials = auth(req);
+    if (!credentials || credentials.name !== authEnv.AUTH_USERNAME || credentials.pass !== authEnv.AUTH_PASSWORD) {
+        res.statusCode = 401;
+        res.send('Access denied');
+    }
+
     const projectID = req.body.envVar.PROJECT_ID;
     
     //Let the user know that we have to update their information

@@ -9,8 +9,6 @@ const yenv = require('yenv');
 const auth = require('basic-auth');
 
 exports.entryFunction = function entryFunction (req, res) {
-    console.log('Received Request Body: ' + JSON.stringify(req.body));
-    
     //Environment variable handling
     if (process.env.NODE_ENV !== 'production') {
         process.env.NODE_ENV = 'development'
@@ -18,6 +16,10 @@ exports.entryFunction = function entryFunction (req, res) {
     const env = yenv('env.yaml');
     const authEnv = yenv('auth.yaml');
     
+    if (env.LOGGING) {
+        console.log('Received Request Body: ' + JSON.stringify(req.body));
+    }
+
     //Authentication
     var credentials = auth(req);
     if (!credentials || credentials.name !== authEnv.AUTH_USERNAME || credentials.pass !== authEnv.AUTH_PASSWORD) {
@@ -59,9 +61,11 @@ exports.entryFunction = function entryFunction (req, res) {
             envVar: env
         }
     }, function (error, response, body) {
-        console.log('error:', error); // Print the error if one occurred 
-        console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received 
-        console.log('body:', body); //Prints the response of the request.
+        if (env.LOGGING) {
+            console.log('error:', error); // Print the error if one occurred 
+            console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received 
+            console.log('body:', body); //Prints the response of the request.
+        }
         //If we run into an error 
         if (response.statusCode >= 300 || response.statusCode < 200) {
             body = {"fulfillmentText": "I ran into a problem while trying to answer your question. Please try again."};
