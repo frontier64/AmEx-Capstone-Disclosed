@@ -26,40 +26,26 @@ exports.entryFunction = function entryFunction (req, res) {
     }
     
     //Could be changed so that intent names are stored in the env vars but this works for now since they are only used here
-    var getter_function = "";
-    var infoType = "";
+    var callingFunction = "";
+
+    //Determine which function to route to based on intent. Pass entities to functions to be handled.
     switch (req.body.queryResult.intent.displayName) {
-        
-        //Getter intents
         case "getUserInfo":
-            switch(req.body.queryResult.parameters.userInfo){
-                case "pto":
-                    getter_function = "getPTO";
-                    break;
-                case "email":
-                case "name":
-                case "serviceyears":
-                case "employeestatus":
-                case "address":
-                    getter_function = "getUserInfo";
-                    break;
-            }
+            callingFunction = "getUserInfo";
             break;
-        
-        //Setter intents
+        case "get_pto":
+            callingFunction = "getPTO";
+            break;
         case "setUserInfo":
-            getter_function = "setUserInfo";
-            infoType = req.body.queryResult.intent.displayName.substring(4);
-            req.body.queryResult.parameters.userInfo = infoType;
+            callingFunction = "setUserInfo";
             break;
-        
         default:
             res.statusCode = 404;
             res.send({"fulfillmentText" : "I'm not sure what information you're asking for."});
         
     }
     //Request handling
-    var url = env.BASE_URL + getter_function;
+    var url = env.BASE_URL + callingFunction;
     const authHeader = "Basic " + new Buffer(credentials.name + ":" + credentials.pass).toString('base64');
     request({
         uri: url,
