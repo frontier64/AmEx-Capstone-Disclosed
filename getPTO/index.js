@@ -20,7 +20,8 @@ exports.getPTO = (req, res) => {
     }
 
     var slackUserID = req.body.slackInfo.authed_users[0];
-    var projectID = req.body.envVar.PROJECT_ID //(Waiting on environment variable forwarding in order to enable this)
+    var projectID = req.body.envVar.PROJECT_ID; //(Waiting on environment variable forwarding in order to enable this)
+    var logging = req.body.envVar.LOGGING;
 
     // Creates a datastore client connection
     const datastore = new Datastore({ projectId: projectID, });
@@ -91,7 +92,10 @@ exports.getPTO = (req, res) => {
             }
         }
         else {
-            response = "Error: One of either band or yearsserved from datastore is null. Band: " + band + ". Years: " + yearsServed + ".";
+            response = "Sorry, it looks like I don't have that information. Please contact an administrator to update your information.";
+            if (logging) {
+                console.log("Error: One of either band or years served from datastore is null. Bands: " + band + ". Years: " + yearsServed + ".");
+            }
         }
 
         //Build and send the response

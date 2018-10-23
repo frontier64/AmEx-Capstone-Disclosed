@@ -23,7 +23,8 @@ exports.getUserInfo = (req, res) => {
     var slackChannelID = req.body.slackInfo.event.channel;
     var slackTeamID = req.body.slackInfo.team_id; //Currently not used
     var requestedProperty = req.body.queryInfo.userInfo; //userInfo isn't a very descriptive name. Consider changing?
-    var projectID = req.body.envVar.PROJECT_ID //(Waiting on environment variable forwarding in order to enable this)
+    var projectID = req.body.envVar.PROJECT_ID; //(Waiting on environment variable forwarding in order to enable this)
+    var logging = req.body.envVar.LOGGING;
     var envVar = req.body.envVar;
     
     // Creates a datastore client connection
@@ -52,13 +53,16 @@ exports.getUserInfo = (req, res) => {
                 }
             });            
         } 
-        else if (results[0].length === 1){ //A single result, as expected.
+        else if (results[0].length === 1 && results[0][0][requestedProperty] !== ""){ //A single result, as expected.
             response = "Your " + requestedProperty + " is " + results[0][0][requestedProperty];
             /*". SlackID: " + slackUserID + ". ChannelID: " + slackChannelID;*/
         
         } 
         else { //Query issue. Most likely caused by the query returning more than 1 user. 
-            response = "Error: Malformed query of slackID. SlackID query returned " + results[0].length + " results.";
+            response = "Sorry I wasn't able to get your " + requestedProperty + ". You may need to contact an administrator.";
+            if(logging) {
+                console.log("Error: Malformed query of slackID. SlackID query returned " + results[0].length + " results.");
+            }
         }
         
         //Build and send the response

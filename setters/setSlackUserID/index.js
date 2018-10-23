@@ -19,6 +19,7 @@
     }
 
     const projectID = req.body.envVar.PROJECT_ID;
+    const logging = req.body.envVar.LOGGING;
     
     //Let the user know that we have to update their information
     request({
@@ -34,11 +35,13 @@
             "channel" : req.body.slackChannel
         }
     }, function (error, response, body) {
-        if (error) {
-            console.log(error);
-        }
-        else {
-            console.log("message sent to user: " + body);
+        if (logging) {   
+            if (error) {
+                console.log(error);
+            }
+            else {
+                console.log("message sent to user: " + body);
+            }
         }
     });
 
@@ -50,9 +53,8 @@
             "Authorization" : "Bearer " + req.body.envVar.SLACK_TOKEN
         }
     }, function (error, response, body){
-        if (error) {
+        if (error && logging)
             console.log(error);
-        }
 
         const jsb = JSON.parse(body);
         var userEmail = jsb.user.profile.email;
@@ -60,8 +62,9 @@
 
         if (userEmail && slackUserID) {
             //Add the slack user ID to the DB
-            console.log("Adding " + userEmail + "'s slackID");
-            
+            if (logging)
+                console.log("Adding " + userEmail + "'s slackID");
+
             // Creates a datastore client connection
             const datastore = new Datastore({ projectId: projectID, });
 
@@ -70,7 +73,8 @@
             .filter('email','=',userEmail);
 
             datastore.runQuery(userQuery).then(results => {
-                console.log('setSlackUserID - query ran, found ' + results[0].length);
+                if (logging)
+                    console.log('setSlackUserID - query ran, found ' + results[0].length);
 
                 if(results[0].length == 1) { //Only 1 result allowed in case of duplicate email (shouldn't happen anyway)
                     var userEntity = results[0];
@@ -79,7 +83,8 @@
                     datastore //Saving updated entity to Datastore
                     .save(userEntity)
                     .then(() => {
-                        console.log('Success setSlackUserID - Associated slackID');
+                        if (logging)
+                            console.log('Success setSlackUserID - Associated slackID');
                         request({
                             url: "https://slack.com/api/chat.postMessage",
                             method: "POST",
@@ -92,17 +97,18 @@
                                 "channel" : req.body.slackChannel
                             }
                         }, function (error, response, body) {
-                            if (error) {
-                                console.log(error);
-                            }
-                            else {
-                                console.log("message sent to user: " + body);
+                            if (logging) {
+                                if (error)
+                                    console.log(error);
+                                else
+                                    console.log("message sent to user: " + body);
                             }
                         });
                         res.json("Success!");
                     })
                     .catch(err => {
-                        console.error('Error setSlackUserID - DS Save Error: ', err);
+                        if (logging)
+                            console.error('Error setSlackUserID - DS Save Error: ', err);
                         res.statusCode = 500;
                         res.send(err);
                    });
