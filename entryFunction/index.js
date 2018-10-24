@@ -23,12 +23,15 @@ exports.entryFunction = function entryFunction (req, res) {
     //Authentication
     var credentials = auth(req);
     if (!credentials || credentials.name !== authEnv.AUTH_USERNAME || credentials.pass !== authEnv.AUTH_PASSWORD) {
-        res.statusCode = 401;
-        res.send('Access denied');
+        res.json(401, "Sorry, you don't have permission to access this resource.");
     }
     
     //Could be changed so that intent names are stored in the env vars but this works for now since they are only used here
     var callingFunction = "";
+
+    if (!req.body.queryResult) {
+        res.json(400, {"fulfillmentText": "Looks like there was a problem with your question. Try again."});
+    }
 
     //Determine which function to route to based on intent. Pass entities to functions to be handled.
     switch (req.body.queryResult.intent.displayName) {
@@ -42,8 +45,7 @@ exports.entryFunction = function entryFunction (req, res) {
             callingFunction = "setUserInfo";
             break;
         default:
-            res.statusCode = 404;
-            res.send({"fulfillmentText" : "I'm not sure what information you're asking for."});
+            res.json(404, {"fulfillmentText" : "I'm not sure what information you're asking for."});
         
     }
     //Request handling
@@ -68,8 +70,8 @@ exports.entryFunction = function entryFunction (req, res) {
         }
         //If we run into an error 
         if (response.statusCode >= 300 || response.statusCode < 200) {
-            body = {"fulfillmentText": "I ran into a problem while trying to answer your question. Please try again."};
+            body = {"fulfillmentText": body};
         }
-        res.send(body);
+        res.json(body);
     });
 };

@@ -14,8 +14,7 @@
     const authEnv = yenv('auth.yaml');
     var credentials = auth(req);
     if (!credentials || credentials.name !== authEnv.AUTH_USERNAME || credentials.pass !== authEnv.AUTH_PASSWORD) {
-        res.statusCode = 401;
-        res.send('Access denied');
+        res.json(401, "Sorry, you don't have permission to access this resource.");
     }
 
     const projectID = req.body.envVar.PROJECT_ID;
@@ -53,8 +52,9 @@
             "Authorization" : "Bearer " + req.body.envVar.SLACK_TOKEN
         }
     }, function (error, response, body){
-        if (error && logging)
+        if (error && logging) {
             console.log(error);
+        }
 
         const jsb = JSON.parse(body);
         var userEmail = jsb.user.profile.email;
@@ -97,27 +97,25 @@
                                 "channel" : req.body.slackChannel
                             }
                         }, function (error, response, body) {
-                            if (logging) {
-                                if (error)
+                            if (error) {
+                                if (logging)
                                     console.log(error);
                                 else
                                     console.log("message sent to user: " + body);
                             }
                         });
-                        res.json("Success!");
+                        res.json(200, {msg : "I updated your email."});
                     })
                     .catch(err => {
                         if (logging)
                             console.error('Error setSlackUserID - DS Save Error: ', err);
-                        res.statusCode = 500;
-                        res.send(err);
+                        res.json(500, { msg: "I'm having trouble storing your information. Please try again."});
                    });
                 }
             });
         }
         else {
-            res.statusCode = 500;
-            res.send(error);
+            res.json(400, { msg: "I couldn't get your email or slack ID." });
         }
     });
 }
