@@ -19,7 +19,11 @@
 
     const projectID = req.body.envVar.PROJECT_ID;
     const logging = req.body.envVar.LOGGING;
-    
+
+    if(!req.body.slackChannel || !req.body.slackUser) {
+        res.json(400, {msg: "I think you forgot to send me some information. Try again?"});
+    }
+
     //Let the user know that we have to update their information
     request({
         url: "https://slack.com/api/chat.postMessage",

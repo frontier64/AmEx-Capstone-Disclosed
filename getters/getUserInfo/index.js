@@ -17,7 +17,11 @@ exports.getUserInfo = (req, res) => {
     if (!credentials || credentials.name !== authEnv.AUTH_USERNAME || credentials.pass !== authEnv.AUTH_PASSWORD) {
         res.json(401, "Sorry, you don't have permission to access this resource.");
     }
-
+    
+    if (!req.body.slackInfo || !req.body.queryInfo) {
+        res.json(400, {msg: "I think you forgot to send me some information. Try again?"});
+    }
+    
     var slackUserID = req.body.slackInfo.authed_users[0];
     var slackChannelID = req.body.slackInfo.event.channel;
     var slackTeamID = req.body.slackInfo.team_id; //Currently not used
