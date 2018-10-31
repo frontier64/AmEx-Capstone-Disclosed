@@ -72,6 +72,6 @@ exports.entryFunction = function entryFunction (req, res) {
         if (response.statusCode >= 300 || response.statusCode < 200) {
             body = {"fulfillmentText": body};
         }
-        res.json(body);
+        res.send(body);
     });
 };
