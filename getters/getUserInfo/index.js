@@ -15,11 +15,11 @@ exports.getUserInfo = (req, res) => {
 
     var credentials = auth(req);
     if (!credentials || credentials.name !== authEnv.AUTH_USERNAME || credentials.pass !== authEnv.AUTH_PASSWORD) {
-        res.json(401, "Sorry, you don't have permission to access this resource.");
+        res.json(401, {"fulfillmentText": "Sorry, you don't have permission to access this resource."});
     }
     
     if (!req.body.slackInfo || !req.body.queryInfo) {
-        res.json(400, {msg: "I think you forgot to send me some information. Try again?"});
+        res.json(400, {"fulfillmentText": "I think you forgot to send me some information. Try again?"});
     }
     
     var slackUserID = req.body.slackInfo.authed_users[0];
@@ -69,11 +69,11 @@ exports.getUserInfo = (req, res) => {
         }
         
         //Build and send the response
-        res.json({"fulfillmentText": response});
+        res.json({ "fulfillmentText": response});
     }).catch((err) => {
         if(logging) {
             console.log(err);
         }
-        res.json(500, "Sorry, I ran into a problem while trying to save your information.");
+        res.json(500, {"fulfillmentText" :"Sorry, I ran into a problem while trying to get your information."});
     });
 }

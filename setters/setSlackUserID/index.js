@@ -14,14 +14,14 @@
     const authEnv = yenv('auth.yaml');
     var credentials = auth(req);
     if (!credentials || credentials.name !== authEnv.AUTH_USERNAME || credentials.pass !== authEnv.AUTH_PASSWORD) {
-        res.json(401, "Sorry, you don't have permission to access this resource.");
+        res.json(401, {"fulfillmentText": "Sorry, you don't have permission to access this resource."});
     }
 
     const projectID = req.body.envVar.PROJECT_ID;
     const logging = req.body.envVar.LOGGING;
 
     if(!req.body.slackChannel || !req.body.slackUser) {
-        res.json(400, {msg: "I think you forgot to send me some information. Try again?"});
+        res.json(400, {"fulfillmentText": "I think you forgot to send me some information. Try again?"});
     }
 
     //Let the user know that we have to update their information
@@ -108,18 +108,18 @@
                                     console.log("message sent to user: " + body);
                             }
                         });
-                        res.json(200, {msg : "I updated your email."});
+                        res.json(200, {"fulfillmentText" : "I updated your email."});
                     })
                     .catch(err => {
                         if (logging)
                             console.error('Error setSlackUserID - DS Save Error: ', err);
-                        res.json(500, { msg: "I'm having trouble storing your information. Please try again."});
+                        res.json(500, { "fulfillmentText": "I'm having trouble storing your information. Please try again."});
                    });
                 }
             });
         }
         else {
-            res.json(400, { msg: "I couldn't get your email or slack ID." });
+            res.json(400, { "fulfillmentText": "I couldn't get your email or slack ID." });
         }
     });
 }

@@ -16,7 +16,7 @@ exports.getPTO = (req, res) => {
     var credentials = auth(req);
     if (!credentials || credentials.name !== authEnv.AUTH_USERNAME || credentials.pass !== authEnv.AUTH_PASSWORD) {
         res.statusCode = 401;
-        res.send('Access denied');
+        res.json(401, {"fulfillmentText":"Sorry, you don't have permission to access this resource."});
     }
 
     var slackUserID = req.body.slackInfo.authed_users[0];

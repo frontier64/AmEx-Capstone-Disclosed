@@ -68,10 +68,6 @@ exports.entryFunction = function entryFunction (req, res) {
             console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received 
             console.log('body:', body); //Prints the response of the request.
         }
-        //If we run into an error 
-        if (response.statusCode >= 300 || response.statusCode < 200) {
-            body = {"fulfillmentText": body};
-        }
-        res.send(body);
+        res.json(response.statusCode, JSON.parse(body));
     });
 };
